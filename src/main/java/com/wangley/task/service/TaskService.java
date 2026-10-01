@@ -1,5 +1,6 @@
 package com.wangley.task.service;
 
+import com.wangley.task.exception.TaskNotFoundException;
 import com.wangley.task.model.Task;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ public class TaskService {
                 .stream()
                 .filter(task -> task.getId().equals(id))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() ->
+                        new TaskNotFoundException("Task not found with id: " + id));
     }
 
 }
