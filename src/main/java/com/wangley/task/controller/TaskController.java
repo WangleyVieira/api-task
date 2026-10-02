@@ -3,6 +3,7 @@ package com.wangley.task.controller;
 import com.wangley.task.dto.CreateTaskRequest;
 import com.wangley.task.model.Task;
 import com.wangley.task.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,9 @@ public class TaskController {
 
     @PostMapping("/api/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task create(@RequestBody CreateTaskRequest request) {
+    public Task create(
+            @Valid @RequestBody CreateTaskRequest request
+    ) {
         return taskService.create(
                 request.title(),
                 request.completed()
