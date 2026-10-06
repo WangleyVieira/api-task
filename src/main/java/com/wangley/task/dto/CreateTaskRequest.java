@@ -6,6 +6,7 @@ public record CreateTaskRequest(
 
         @NotBlank(message = "Title is required")
         String title,
+
         boolean completed
 ) {
 }
