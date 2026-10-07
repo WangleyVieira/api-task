@@ -48,4 +48,22 @@ public class TaskService {
         return newTask;
     }
 
+    // This method updates an existing task with the given ID, title, and completed status.
+    public Task update(Long id, String title, boolean completed) {
+        Task task = findById(id);
+
+        Task updatedTask = new Task(task.getId(), title, completed);
+        tasks.remove(task);
+        tasks.add(updatedTask);
+
+        return updatedTask;
+    }
+
+    // This method deletes a task with the given ID.
+    public void delete(Long id) {
+        Task task = findById(id);
+
+        tasks.remove(task);
+    }
+
 }
