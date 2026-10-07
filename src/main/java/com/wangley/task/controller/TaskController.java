@@ -1,6 +1,7 @@
 package com.wangley.task.controller;
 
 import com.wangley.task.dto.CreateTaskRequest;
+import com.wangley.task.dto.UpdateTaskRequest;
 import com.wangley.task.model.Task;
 import com.wangley.task.service.TaskService;
 import jakarta.validation.Valid;
@@ -37,5 +38,24 @@ public class TaskController {
                 request.title(),
                 request.completed()
         );
+    }
+
+    @PutMapping("/api/tasks/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Task update(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTaskRequest request
+    ) {
+        return taskService.update(
+                id,
+                request.title(),
+                request.completed()
+        );
+    }
+
+    @DeleteMapping("/api/tasks/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        taskService.delete(id);
     }
 }
