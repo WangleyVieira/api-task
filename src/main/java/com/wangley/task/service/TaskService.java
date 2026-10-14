@@ -1,69 +1,54 @@
 package com.wangley.task.service;
 
-import com.wangley.task.dto.CreateTaskRequest;
 import com.wangley.task.exception.TaskNotFoundException;
 import com.wangley.task.model.Task;
+import com.wangley.task.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService {
 
-    // This is a list of tasks that is initialized with some sample data.
-    private final List<Task> tasks = new ArrayList<>(
-            List.of(
-                    new Task(1L, "Task 1", false),
-                    new Task(2L, "Task 2", true),
-                    new Task(3L, "Task 3", false)
-            )
-    );
+    private final TaskRepository taskRepository;
 
-    // This method returns a copy of the list of tasks.
-    public List<Task> listTask() {
-        return List.copyOf(tasks);
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
+
+    // This is a list of tasks that is initialized with some sample data.
+    public List<Task> listTask() {
+        return taskRepository.findAll();
+    }
+
 
     // This method finds a task by its ID.
     public Task findById(Long id) {
-        return listTask()
-                .stream()
-                .filter(task -> task.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() ->
-                        new TaskNotFoundException("Task not found with id: " + id));
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
     }
 
     // This method creates a new task with the given title and completed status.
-    public Task create(String title, boolean completed) {
-        Long nextId = tasks.stream()
-                .mapToLong(Task::getId)
-                .max().orElse(0L) + 1;
-
-        Task newTask = new Task(nextId, title, completed);
-
-        tasks.add(newTask);
-
-        return newTask;
+    public Task create(Task task) {
+        return taskRepository.save(task);
     }
 
     // This method updates an existing task with the given ID, title, and completed status.
-    public Task update(Long id, String title, boolean completed) {
+    public Task update(Long id, Task updatedTask) {
         Task task = findById(id);
 
-        Task updatedTask = new Task(task.getId(), title, completed);
-        tasks.remove(task);
-        tasks.add(updatedTask);
+        Task taskToUpdate = new Task(
+                task.getId(),
+                updatedTask.getTitle(),
+                updatedTask.isCompleted()
+        );
 
-        return updatedTask;
+        return taskRepository.save(taskToUpdate);
     }
 
     // This method deletes a task with the given ID.
     public void delete(Long id) {
         Task task = findById(id);
-
-        tasks.remove(task);
+        taskRepository.delete(task);
     }
-
 }
