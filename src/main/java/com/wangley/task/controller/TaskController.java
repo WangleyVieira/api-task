@@ -34,10 +34,11 @@ public class TaskController {
     public Task create(
             @Valid @RequestBody CreateTaskRequest request
     ) {
-        return taskService.create(
+        Task task = new Task(
                 request.title(),
                 request.completed()
         );
+        return taskService.create(task);
     }
 
     @PutMapping("/api/tasks/{id}")
@@ -46,11 +47,11 @@ public class TaskController {
             @PathVariable Long id,
             @Valid @RequestBody UpdateTaskRequest request
     ) {
-        return taskService.update(
-                id,
+        Task updatedTask = new Task(
                 request.title(),
                 request.completed()
         );
+        return taskService.update(id, updatedTask);
     }
 
     @DeleteMapping("/api/tasks/{id}")
