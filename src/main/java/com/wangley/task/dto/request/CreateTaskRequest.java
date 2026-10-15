@@ -1,4 +1,4 @@
-package com.wangley.task.dto;
+package com.wangley.task.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
