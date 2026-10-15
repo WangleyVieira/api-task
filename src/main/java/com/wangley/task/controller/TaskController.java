@@ -1,7 +1,8 @@
 package com.wangley.task.controller;
 
-import com.wangley.task.dto.CreateTaskRequest;
-import com.wangley.task.dto.UpdateTaskRequest;
+import com.wangley.task.dto.request.CreateTaskRequest;
+import com.wangley.task.dto.request.UpdateTaskRequest;
+import com.wangley.task.dto.response.TaskResponse;
 import com.wangley.task.model.Task;
 import com.wangley.task.service.TaskService;
 import jakarta.validation.Valid;
@@ -20,30 +21,34 @@ public class TaskController {
     }
 
     @GetMapping("/api/tasks")
-    public List<Task> listTask() {
-        return taskService.listTask();
+    public List<TaskResponse> listTask() {
+        return taskService.listTask()
+                .stream()
+                .map(TaskResponse::from)
+                .toList();
     }
 
     @GetMapping("/api/tasks/{id}")
-    public Task findById(@PathVariable Long id) {
-        return taskService.findById(id);
+    public TaskResponse findById(@PathVariable Long id) {
+        return TaskResponse.from(taskService.findById(id));
     }
 
     @PostMapping("/api/tasks")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task create(
+    public TaskResponse create(
             @Valid @RequestBody CreateTaskRequest request
     ) {
         Task task = new Task(
                 request.title(),
                 request.completed()
         );
-        return taskService.create(task);
+
+        return TaskResponse.from(taskService.create(task));
     }
 
     @PutMapping("/api/tasks/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task update(
+    public TaskResponse update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateTaskRequest request
     ) {
@@ -51,7 +56,7 @@ public class TaskController {
                 request.title(),
                 request.completed()
         );
-        return taskService.update(id, updatedTask);
+        return TaskResponse.from(taskService.update(id, updatedTask));
     }
 
     @DeleteMapping("/api/tasks/{id}")
