@@ -1,9 +1,8 @@
 package com.wangley.task.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Task {
@@ -15,6 +14,9 @@ public class Task {
     private String title;
 
     private boolean completed;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public Task() {
     }
@@ -40,5 +42,16 @@ public class Task {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @PrePersist
+    protected void prePersist() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
 }
