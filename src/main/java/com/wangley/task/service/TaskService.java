@@ -3,24 +3,21 @@ package com.wangley.task.service;
 import com.wangley.task.exception.TaskNotFoundException;
 import com.wangley.task.model.Task;
 import com.wangley.task.repository.TaskRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
 
     private final TaskRepository taskRepository;
-
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
 
     // This is a list of tasks that is initialized with some sample data.
     public List<Task> listTask() {
         return taskRepository.findAll();
     }
-
 
     // This method finds a task by its ID.
     public Task findById(Long id) {
