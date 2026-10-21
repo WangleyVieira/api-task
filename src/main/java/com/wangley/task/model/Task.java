@@ -1,10 +1,14 @@
 package com.wangley.task.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Task {
 
     @Id
@@ -18,9 +22,6 @@ public class Task {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Task() {
-    }
-
     public Task(Long id, String title, boolean completed) {
         this.id = id;
         this.title = title;
@@ -30,22 +31,6 @@ public class Task {
     public Task(String title, boolean completed) {
         this.title = title;
         this.completed = completed;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
     @PrePersist
